@@ -1,19 +1,11 @@
 import { PluginTemplate, PluginSettings, Action, ActiveAction } from 'sequences-types';
-import net from 'net';
+import actions from './actions';
 import settingsInputs from './settingsInputs';
-import { vMixInput } from './types';
-import { capitalizeFirstLetter, parseInputsFromXML } from './utils';
-import actions, { addInputsToActions } from './actions/index';
 
-class vMixPlugin extends PluginTemplate {
-	name = 'vMix';
-	id = 0;
+class TestPlugin extends PluginTemplate {
+	name = 'Test';
+	id = 1;
 	settingsInputs = settingsInputs;
-	actions = actions;
-	socket: net.Socket;
-	pollingInterval = 1000;
-	pollingTimer: NodeJS.Timer = null;
-	inputs: vMixInput[] = [];
 
 	constructor() {
 		super();
@@ -21,67 +13,26 @@ class vMixPlugin extends PluginTemplate {
 
 	setup = (options: PluginSettings) => {
 		const { ip, port } = options;
-		this.socket = new net.Socket();
-		try {
-			this.socket.connect(+port, ip, () => {
-				// Setting up vMix API polling
-				this.pollingTimer = setInterval(() => {
-					this.socket.write('XML\r\n', (error: any) => {
-						if (error) {
-							this.setStatus('ERROR');
-							this.destroy();
-						}
-					});
-				}, this.pollingInterval);
-			});
+		this.setStatus('LOADING');
 
-			this.socket.on('error', () => {
+		setTimeout(() => {
+			if (ip !== '127.0.0.1' || port !== '2222') {
 				this.setStatus('ERROR');
-				this.destroy();
-			});
-
-			this.socket.on('data', (data: Buffer) => {
-				// First message from vMix - confirms connection
-				if (data.toString().startsWith('VERSION')) {
-					return;
-				}
-
-				// Polling response
-				if (data.toString().startsWith('XML')) {
-					const splitData = data.toString().split(/\r?\n/);
-					if (splitData.length >= 2 && splitData[1])
-						this.inputs = parseInputsFromXML(splitData[1]);
-					if (this.getStatus() === 'LOADING') this.setStatus('RUNNING');
-				}
-			});
-		} catch (error) {
-			this.setStatus('ERROR');
-		}
+			} else {
+				this.setStatus('RUNNING');
+			}
+		}, 2000);
 	};
 
-	destroy = () => {
-		this.pollingTimer && clearInterval(this.pollingTimer);
-		this.socket.end();
-		this.socket.destroy();
-	};
+	destroy = () => {};
 
 	getActions = () => {
-		return addInputsToActions(this.actions, this.inputs);
+		return actions;
 	};
 
 	handleAction = (action: ActiveAction) => {
-		const params = Object.entries(action.settings)
-			.reduce((acc, [key, value]) => `${acc}${capitalizeFirstLetter(key)}=${value}&`, '')
-			.slice(0, -1);
-		const message = `FUNCTION ${action.name} ${params}\r\n`;
-		console.log(message);
-		this.socket.write(message, (error: any) => {
-			if (error) {
-				this.setStatus('ERROR');
-				this.destroy();
-			}
-		});
+		console.log(`Handling action: ${action}`);
 	};
 }
 
-export default vMixPlugin;
+export default TestPlugin;

@@ -1,53 +1,66 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const options = ['A', 'B', 'C'].map((option) => ({
+    text: option,
+    value: option,
+}));
+const defaultOption = 'A';
 const actions = [
     {
         id: 0,
-        name: 'Cut',
+        name: 'Number test action',
         settingsInputs: [
             {
-                id: 'duration',
                 type: 'NUMBER',
-                label: 'Duration (ms)',
-                value: 200,
+                value: 100,
+                min: 0,
+                max: 100,
+                id: 'NumberValue',
                 required: true,
+                label: 'Number input label',
             },
         ],
-        addInputField: true,
     },
     {
         id: 1,
-        name: 'Fade',
+        name: 'Text test action',
         settingsInputs: [
             {
-                id: 'duration',
-                type: 'NUMBER',
-                label: 'Duration (ms)',
-                value: 200,
+                type: 'TEXT',
+                value: 'Test value',
+                id: 'TextValue',
                 required: true,
+                label: 'Text input label',
             },
         ],
-        addInputField: true,
     },
     {
         id: 2,
-        name: 'OverlayInput1',
-        settingsInputs: [],
-        addInputField: true,
+        name: 'Dropdown test action',
+        settingsInputs: [
+            {
+                type: 'DROPDOWN',
+                value: defaultOption,
+                placeholder: 'Audio bus',
+                options: options,
+                id: 'DropdownValue',
+                required: true,
+                label: 'Dropdown input label',
+            },
+        ],
+    },
+    {
+        id: 3,
+        name: 'Checkbox test action',
+        settingsInputs: [
+            {
+                type: 'CHECKBOX',
+                value: false,
+                id: 'CheckboxValue',
+                required: false,
+                label: 'Checkbox input label',
+            },
+        ],
     },
 ];
-export default actions;
-export const addInputsToActions = (actions, inputs) => {
-    const inputsField = {
-        id: 'input',
-        type: 'DROPDOWN',
-        label: 'Input',
-        value: '',
-        options: inputs.map((input) => ({ text: input.title, value: input.key })),
-        required: true,
-        placeholder: 'Select input',
-    };
-    return actions.map((action) => {
-        return action.addInputField
-            ? { ...action, settingsInputs: [...action.settingsInputs, inputsField] }
-            : action;
-    });
-};
+exports.default = actions;

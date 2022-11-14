@@ -1,4 +1,3 @@
-import { vMixAction, vMixInput } from './types';
-declare const actions: vMixAction[];
+import { Action } from 'sequences-types';
+declare const actions: Action[];
 export default actions;
-export declare const addInputsToActions: (actions: vMixAction[], inputs: vMixInput[]) => vMixAction[];

@@ -1,5 +1,5 @@
 {
-  "name": "sequences-plugin-vmix",
+  "name": "sequences-plugin-test",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -15,21 +15,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pjaspinski/sequences-plugin-vmix.git"
+    "url": "git+https://github.com/pjaspinski/sequences-plugin-test.git"
   },
   "author": "Paweł Jaśpiński",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pjaspinski/sequences-plugin-vmix/issues"
+    "url": "https://github.com/pjaspinski/sequences-plugin-test/issues"
   },
-  "homepage": "https://github.com/pjaspinski/sequences-plugin-vmix#readme",
+  "homepage": "https://github.com/pjaspinski/sequences-plugin-test#readme",
   "devDependencies": {
     "@types/node": "^17.0.35",
     "husky": "^7.0.0",
     "sequences-types": "github:pjaspinski/sequences-types",
     "typescript": "^4.6.4"
-  },
-  "dependencies": {
-    "fast-xml-parser": "^4.0.8"
   }
 }
